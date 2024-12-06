@@ -55,8 +55,7 @@ const MeteoDetailsComponent = () => {
       switch (description) {
         case "Thunderstorm":
           return "⛈️";
-        case "Drizzle":
-          return "🌦️";
+
         case "Rain":
           return "🌧️";
         case "Snow":
@@ -120,53 +119,65 @@ const MeteoDetailsComponent = () => {
         </div>
 
         <Row className="d-flex justify-content-around">
-          {meteoCinqueGiorni.slice(0, 5).map((day) => {
-            const date = new Date(day.dt * 1000);
-            const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
-            const temperature = day.main.temp.toFixed(1);
-            const weatherDescription = day.weather[0].main;
-            const icon = getWeatherIcon(weatherDescription);
+          {
+            //prendo il primo elemento dei primi cinque giorni
+            //index --> iterazione per ogni giorno
+            meteoCinqueGiorni.slice(0, 5).map((day, index) => {
+              //data di oggi
+              const today = new Date();
 
-            return (
-              <Col key={day.dt} xs={10} md={4} lg={3} xl={2} className="mb-5">
-                <Card>
-                  <Card.Body className="DaysCards text-light rounded border ">
-                    <Card.Title>
-                      {dayName}, {date.getHours()}:{date.getMinutes().toString().padStart(2, "0")}
-                    </Card.Title>
-                    <Card.Text>
-                      <p className="mt-3 fs-2">
-                        <strong className="me-2">{weatherDescription.toUpperCase()}</strong>
-                        {icon}
-                      </p>
+              //prendo la data di oggi e aggiungo 0 giorni al primo giro, 1 al secondo ecc...
+              const cardDate = new Date(today.setDate(today.getDate() + index));
 
-                      <div>
-                        <p className="text-light">
-                          <i className="bi bi-thermometer-half me-2" style={{ color: "white", fontSize: "18px" }}></i>
-                          <strong>Temperature:</strong> {temperature} °C
-                        </p>
-                      </div>
-                      <div className="d-flex gap-2" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
-                        <p>
-                          <strong>Max: </strong> {day.main.temp_max} °C
-                        </p>
-                        <p>
-                          <strong>Min: </strong> {day.main.temp_min} °C
-                        </p>
-                      </div>
+              //converto la data e ricavo solo il nome del giorno
+              const dayName = cardDate.toLocaleDateString("en-US", { weekday: "long" });
 
-                      <div>
-                        <p className="text-light">
-                          <i className="bi bi-droplet-fill me-2" style={{ color: "white", fontSize: "18px" }}></i>
-                          <strong>Humidity:</strong> {weatherInfo.main.humidity}%
+              //ottengop temperatura approssimata
+              const temperature = day.main.temp.toFixed(1);
+
+              //icona in base alla descrizione
+              const weatherDescription = day.weather[0].main;
+              const icon = getWeatherIcon(weatherDescription);
+
+              return (
+                <Col key={day.dt} xs={10} md={4} lg={3} xl={2} className="mb-5">
+                  <Card>
+                    <Card.Body className="DaysCards text-light rounded border">
+                      <Card.Title>{dayName}</Card.Title>
+                      <Card.Text>
+                        <p className="mt-3 fs-2">
+                          <strong className="me-2">{weatherDescription.toUpperCase()}</strong>
+                          {icon}
                         </p>
-                      </div>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          })}
+
+                        <div>
+                          <p className="text-light">
+                            <i className="bi bi-thermometer-half me-2" style={{ color: "white", fontSize: "18px" }}></i>
+                            <strong>Temperature:</strong> {temperature} °C
+                          </p>
+                        </div>
+                        <div className="d-flex gap-2" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                          <p>
+                            <strong>Max: </strong> {day.main.temp_max} °C
+                          </p>
+                          <p>
+                            <strong>Min: </strong> {day.main.temp_min} °C
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-light">
+                            <i className="bi bi-droplet-fill me-2" style={{ color: "white", fontSize: "18px" }}></i>
+                            <strong>Humidity:</strong> {day.main.humidity}%
+                          </p>
+                        </div>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })
+          }
         </Row>
       </Container>
     );
