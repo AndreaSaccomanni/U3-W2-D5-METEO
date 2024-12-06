@@ -6,3 +6,17 @@
 .footer {
   background: rgb(39, 111, 250);
 }
+
+.DaysCards {
+  background: rgb(100, 152, 254);
+  background: linear-gradient(0deg, rgba(100, 152, 254, 1) 0%, rgb(39, 36, 235) 100%);
+}
+.card{
+  cursor:pointer
+}
+.card:hover{
+  transform: scale(1.05); 
+  transition: transform 0.3s ease-in-out; /
+  
+
+}

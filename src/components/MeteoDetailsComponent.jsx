@@ -113,27 +113,54 @@ const MeteoDetailsComponent = () => {
               </p>
             </div>
           </div>
+          <div>
+            {" "}
+            <h1 className="text-light ms-4 mb-4 ">Next Five Days:</h1>
+          </div>
         </div>
 
         <Row className="d-flex justify-content-around">
           {meteoCinqueGiorni.slice(0, 5).map((day) => {
             const date = new Date(day.dt * 1000);
             const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
-            const temp = day.main.temp.toFixed(1);
+            const temperature = day.main.temp.toFixed(1);
             const weatherDescription = day.weather[0].main;
             const icon = getWeatherIcon(weatherDescription);
 
             return (
               <Col key={day.dt} xs={10} md={4} lg={3} xl={2} className="mb-5">
                 <Card>
-                  <Card.Body>
-                    <Card.Title>{dayName}</Card.Title>
+                  <Card.Body className="DaysCards text-light rounded border ">
+                    <Card.Title>
+                      {dayName}, {date.getHours()}:{date.getMinutes().toString().padStart(2, "0")}
+                    </Card.Title>
                     <Card.Text>
-                      <p>{icon}</p>
-                      <p>{weatherDescription}</p>
-                      <p>
-                        <strong>{temp} °C</strong>
+                      <p className="mt-3 fs-2">
+                        <strong className="me-2">{weatherDescription.toUpperCase()}</strong>
+                        {icon}
                       </p>
+
+                      <div>
+                        <p className="text-light">
+                          <i className="bi bi-thermometer-half me-2" style={{ color: "white", fontSize: "18px" }}></i>
+                          <strong>Temperature:</strong> {temperature} °C
+                        </p>
+                      </div>
+                      <div className="d-flex gap-2" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                        <p>
+                          <strong>Max: </strong> {day.main.temp_max} °C
+                        </p>
+                        <p>
+                          <strong>Min: </strong> {day.main.temp_min} °C
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-light">
+                          <i className="bi bi-droplet-fill me-2" style={{ color: "white", fontSize: "18px" }}></i>
+                          <strong>Humidity:</strong> {weatherInfo.main.humidity}%
+                        </p>
+                      </div>
                     </Card.Text>
                   </Card.Body>
                 </Card>

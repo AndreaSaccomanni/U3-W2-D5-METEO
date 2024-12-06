@@ -10,7 +10,10 @@ const MyFooterComponent = () => {
               <h5>About Us</h5>
               <ul className="list-unstyled">
                 <li>
-                  <p>Here you can find meteo information for your city!</p>
+                  <p>
+                    Here you can find meteo information
+                    <br /> for your city!
+                  </p>
                 </li>
               </ul>
             </Col>
