@@ -65,13 +65,10 @@ const MeteoDetailsComponent = () => {
           return "☀️";
         case "Clouds":
           return "☁️";
-        case "Mist":
+
         case "Fog":
           return "🌫️";
-        case "Sand":
-          return "🌪️";
-        case "Squall":
-          return "💨";
+
         default:
           return "❓";
       }
@@ -118,7 +115,7 @@ const MeteoDetailsComponent = () => {
           </div>
         </div>
 
-        <Row>
+        <Row className="d-flex justify-content-around">
           {meteoCinqueGiorni.slice(0, 5).map((day) => {
             const date = new Date(day.dt * 1000);
             const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
@@ -127,7 +124,7 @@ const MeteoDetailsComponent = () => {
             const icon = getWeatherIcon(weatherDescription);
 
             return (
-              <Col key={day.dt} md={4} className="mb-3">
+              <Col key={day.dt} xs={10} md={4} lg={3} xl={2} className="mb-5">
                 <Card>
                   <Card.Body>
                     <Card.Title>{dayName}</Card.Title>
