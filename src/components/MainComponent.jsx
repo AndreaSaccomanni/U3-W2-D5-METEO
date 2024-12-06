@@ -75,6 +75,10 @@ const MainComponent = () => {
       </Row>
 
       <Row className="justify-content-center gap-3 pb-5">
+        <div className=" d-flex text-center text-light ms-auto">
+          {" "}
+          <h2 className="mx-auto">What is happening to:</h2>
+        </div>
         <Col xs={12} sm={6} md={4} lg={3}>
           <Card>
             <Card.Img
