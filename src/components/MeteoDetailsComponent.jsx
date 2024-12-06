@@ -1,0 +1,153 @@
+import { useLocation } from "react-router-dom";
+import { Card, Col, Container, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+
+const MeteoDetailsComponent = () => {
+  const location = useLocation();
+  const { weatherInfo } = location.state || {};
+
+  // Stato per i dati meteo dei prossimi 5 giorni
+  const [meteoCinqueGiorni, setMeteoCinqueGiorni] = useState([]);
+
+  // Funzione per fare la fetch dei dati meteo dei prossimi 5 giorni
+  const fetchWeatherDays = () => {
+    const apiKey = "a84e27c2398fcc67d1a63fd6b7d39c5c";
+
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&appid=${apiKey}&units=metric`)
+      .then((resp) => {
+        if (resp.ok) {
+          return resp.json();
+        } else {
+          throw new Error("Errore nella chiamata");
+        }
+      })
+      .then((data) => {
+        console.log(data); //fare slice
+        setMeteoCinqueGiorni(data.list); // dati salvati in meteocinqueGiorni
+      })
+      .catch((error) => {
+        console.error("Errore:", error);
+      });
+  };
+
+  // Quando arrivano i dati, parte la fetch solo se weatherInfo è definito
+  useEffect(() => {
+    if (weatherInfo) {
+      fetchWeatherDays();
+    }
+  }, [weatherInfo]); // Aggiungi weatherInfo come dipendenza
+
+  if (!weatherInfo) {
+    return (
+      <Container className="main-section text-center pt-5">
+        <div className="alert alert-danger" role="alert">
+          <h3>Nessun dato trovato!</h3>
+        </div>
+      </Container>
+    );
+  } else {
+    const description = weatherInfo.weather[0].main;
+    const firstTemperature = weatherInfo.main.temp;
+    const minTemperature = weatherInfo.main.temp_min;
+    const maxTemperature = weatherInfo.main.temp_max;
+
+    // Funzione per cambiare icona a seconda della descrizione meteo
+    const getWeatherIcon = (description) => {
+      switch (description) {
+        case "Thunderstorm":
+          return "⛈️";
+        case "Drizzle":
+          return "🌦️";
+        case "Rain":
+          return "🌧️";
+        case "Snow":
+          return "❄️";
+        case "Clear":
+          return "☀️";
+        case "Clouds":
+          return "☁️";
+        case "Mist":
+        case "Fog":
+          return "🌫️";
+        case "Sand":
+          return "🌪️";
+        case "Squall":
+          return "💨";
+        default:
+          return "❓";
+      }
+    };
+
+    return (
+      <Container fluid className="main-section pt-3">
+        <div className="d-flex flex-column pb-4">
+          <div className="d-flex flex-column display-1 text-center mx-auto">
+            <p className="text-light fw-bold">{weatherInfo.name.toUpperCase()}</p>
+            <p className="display-1">{getWeatherIcon(description)}</p>
+            <p className="text-light">{weatherInfo.weather[0].description}</p>
+          </div>
+          <div className="d-flex mx-auto flex-column">
+            <div className="d-flex align-items-center gap-4">
+              <div className="fs-1">
+                <p className="text-light">
+                  <i className="bi bi-thermometer-half me-2" style={{ color: "white", fontSize: "24px" }}></i>
+                  <strong>Temperature:</strong> {(firstTemperature - 273.15).toFixed(1)} °C
+                </p>
+              </div>
+              <div className="d-flex flex-column fs-5" style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                <p>
+                  <strong>Max: </strong> {(maxTemperature - 273.15).toFixed(1)}
+                </p>
+                <p>
+                  <strong>Min: </strong> {(minTemperature - 273.15).toFixed(1)}
+                </p>
+              </div>
+            </div>
+
+            <div className="fs-1">
+              <p className="text-light">
+                <i className="bi bi-droplet-fill me-2" style={{ color: "white", fontSize: "24px" }}></i>
+                <strong>Humidity:</strong> {weatherInfo.main.humidity}%
+              </p>
+            </div>
+            <div className="fs-1 pb-3">
+              <p className="text-light">
+                <i className="bi bi-wind me-2" style={{ color: "white", fontSize: "24px" }}></i>
+                <strong>Wind:</strong> {weatherInfo.wind.speed} m/s
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <Row>
+          {meteoCinqueGiorni.slice(0, 5).map((day) => {
+            const date = new Date(day.dt * 1000); // Convertiamo il timestamp in data
+            const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+            const temp = day.main.temp.toFixed(1); // Temperatura in °C
+            const weatherDescription = day.weather[0].main;
+            const icon = getWeatherIcon(weatherDescription);
+
+            return (
+              <Col key={day.dt} md={4} className="mb-3">
+                <Card>
+                  <Card.Body>
+                    <Card.Title>{dayName}</Card.Title>
+                    <Card.Text>
+                      <p>{icon}</p>
+                      <p>{weatherDescription}</p>
+                      <p>
+                        <strong>{temp} °C</strong>
+                      </p>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </Container>
+    );
+  }
+};
+
+export default MeteoDetailsComponent;

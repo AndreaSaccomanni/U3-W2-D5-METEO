@@ -1,0 +1,8 @@
+.main-section {
+  background: rgb(207, 207, 207);
+  background: linear-gradient(0deg, rgba(207, 207, 207, 1) 0%, rgba(39, 111, 250, 1) 100%);
+}
+
+.footer {
+  background: rgb(39, 111, 250);
+}
