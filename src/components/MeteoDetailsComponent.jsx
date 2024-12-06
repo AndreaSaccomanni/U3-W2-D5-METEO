@@ -35,8 +35,7 @@ const MeteoDetailsComponent = () => {
     if (weatherInfo) {
       fetchWeatherDays();
     }
-  }, [weatherInfo]); // Aggiungi weatherInfo come dipendenza
-
+  }, [weatherInfo]);
   if (!weatherInfo) {
     return (
       <Container className="main-section text-center pt-5">
@@ -119,11 +118,11 @@ const MeteoDetailsComponent = () => {
           </div>
         </div>
 
-        <Row>
+        {/* <Row>
           {meteoCinqueGiorni.slice(0, 5).map((day) => {
-            const date = new Date(day.dt * 1000); // Convertiamo il timestamp in data
+            const date = new Date(day.dt * 1000);
             const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
-            const temp = day.main.temp.toFixed(1); // Temperatura in °C
+            const temp = day.main.temp.toFixed(1);
             const weatherDescription = day.weather[0].main;
             const icon = getWeatherIcon(weatherDescription);
 
@@ -144,7 +143,7 @@ const MeteoDetailsComponent = () => {
               </Col>
             );
           })}
-        </Row>
+        </Row> */}
       </Container>
     );
   }
