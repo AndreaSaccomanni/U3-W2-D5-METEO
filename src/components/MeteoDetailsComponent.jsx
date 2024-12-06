@@ -118,7 +118,7 @@ const MeteoDetailsComponent = () => {
           </div>
         </div>
 
-        {/* <Row>
+        <Row>
           {meteoCinqueGiorni.slice(0, 5).map((day) => {
             const date = new Date(day.dt * 1000);
             const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
@@ -143,7 +143,7 @@ const MeteoDetailsComponent = () => {
               </Col>
             );
           })}
-        </Row> */}
+        </Row>
       </Container>
     );
   }
